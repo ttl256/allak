@@ -2,6 +2,13 @@ from typing import Self
 
 
 class MAC(str):
+    """
+    Represents a MAC address (EUI-48).
+
+    Allowed input is rather liberal: 12 hex digits separated by ':', '-', '.' in any
+    combination.
+    """
+
     def __new__(cls, mac: str) -> Self:
         return super().__new__(cls, MAC._normalize_mac(mac))
 
@@ -10,6 +17,9 @@ class MAC(str):
 
     @staticmethod
     def _normalize_mac(mac: str) -> str:
+        """
+        Returns MAC address in the form of xx:xx:xx:xx:xx:xx.
+        """
         valid_chars = set("0123456789abcdef")
         acceptable_chars = valid_chars.union(set(":-."))
         xs: list[str] = []
@@ -31,7 +41,7 @@ class MAC(str):
 
     def eui64(self) -> str:
         """
-        Convert MAC address (EUI-48) to interface ID based on modified EUI-64
+        Convert MAC address (EUI-48) to interface ID based on modified EUI-64.
         """
         hi, lo = self._mac[: len(self._mac) // 2], self._mac[len(self._mac) // 2 :]
         mask = "020000"
