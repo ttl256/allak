@@ -37,6 +37,8 @@ class MAC(str):
                 xs.append(_char)
             if len(xs) == 12:
                 done = True
+        if done is False:
+            raise ValueError(f"Not a MAC address: {mac!r}. Less than 12 hex digits")
         return ":".join("".join(xs[i : i + 2]) for i in range(0, len(xs), 2))
 
     def eui64(self) -> str:

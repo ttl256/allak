@@ -48,12 +48,26 @@ def test_normalize_invalid_long(mac: str) -> None:
 
 
 @pytest.mark.parametrize(
+    "mac",
+    [
+        "",
+        "a",
+        "1",
+        "ab:cd:ef:ff:00:0",
+    ],
+)
+def test_normalize_invalid_short(mac: str) -> None:
+    with pytest.raises(ValueError, match="Less than 12 hex digits"):
+        MAC(mac)
+
+
+@pytest.mark.parametrize(
     "mac, want",
     [
         ("bc:d0:74:44:5c:1d", "bed0:74ff:fe44:5c1d"),
         ("39-A7-94-07-CB-D0", "3ba7:94ff:fe07:cbd0"),
         ("0015.2BE4.9B60", "0215:2bff:fee4:9b60"),
-        ("FC:99:47:75:CE:E0", "fe99:47ff:fe75:cee0")
+        ("FC:99:47:75:CE:E0", "fe99:47ff:fe75:cee0"),
     ],
 )
 def test_eui64(mac: str, want: str) -> None:
