@@ -29,3 +29,6 @@ no_implicit_optional = true
 
 [tool.black]
 preview = true
+
+[tool.isort]
+profile = "black"
