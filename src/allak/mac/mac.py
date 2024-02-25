@@ -45,7 +45,8 @@ class MAC(str):
         """
         Convert MAC address (EUI-48) to interface ID based on modified EUI-64.
         """
-        hi, lo = self._mac[: len(self._mac) // 2], self._mac[len(self._mac) // 2 :]
-        mask = "020000"
-        plain = format(int(hi, 16) ^ int(mask, 16), "06x") + "fffe" + lo
+        m = int(self._mac, 16)
+        hi = (m >> 24) ^ 0x020000
+        lo = m & 0xFFFFFF
+        plain = format((hi << 40) + (0xFFFE << 24) + lo, "016x")
         return ":".join(plain[i : i + 4] for i in range(0, len(plain), 4))
